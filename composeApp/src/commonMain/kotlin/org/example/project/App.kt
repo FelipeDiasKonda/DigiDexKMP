@@ -1,6 +1,5 @@
-package com.plcoding.cmp_ktor
+package org.example.project
 
-import DigimonListScreen
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,36 +22,34 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 @Preview
 fun App() {
-    var showDigimonList by remember { mutableStateOf(false) }
-
+    val showEmptyMessage by remember { mutableStateOf(false) }
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { showDigimonList = true }) {
+            FloatingActionButton(onClick = { /* Handle FAB click */ }) {
                 Icon(Icons.Default.Add, contentDescription = "Add")
             }
         }
     ) {
-        if (showDigimonList) {
-            DigimonListScreen()
-        } else {
-            Column(
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "DigiDex",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = "DigiDex",
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                )
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            )
+            if (showEmptyMessage) {
                 Text(
                     text = "Empty",
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
+            } else {
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxWidth()
