@@ -47,7 +47,6 @@ kotlin {
                 implementation("com.google.accompanist:accompanist-flowlayout:0.24.13-rc")
                 implementation("io.ktor:ktor-client-cio:2.3.12")
                 implementation("media.kamel:kamel-image:0.7.3")
-
             }
         }
         val androidMain by getting {
@@ -80,7 +79,8 @@ android {
 
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+    // Remova a linha abaixo para evitar duplicação de recursos
+    // sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
         applicationId = "com.plcoding.cmp_ktor"

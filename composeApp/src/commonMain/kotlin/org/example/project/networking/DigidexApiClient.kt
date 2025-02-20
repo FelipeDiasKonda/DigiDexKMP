@@ -1,41 +1,29 @@
-package networking
+package org.example.project.networking
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import io.ktor.util.network.UnresolvedAddressException
-import kotlinx.serialization.SerializationException
-import org.example.project.networking.DigimonResponse
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 class DigidexApiClient(
     private val httpClient: HttpClient
 ) {
+    @Serializable
+    data class DigimonApiResponse(
+        @SerialName("content") val digimons: List<DigimonResponse>
+    )
 
-    suspend fun getAllDigimons(
-        name: String? = null,
-        exact: Boolean = false,
-        attribute: String? = null,
-        page: Int = 1,
-        pageSize: Int = 1400
-    ): List<DigimonResponse> {
+    suspend fun getAllDigimons(): List<DigimonResponse> {
         return try {
-            val response = httpClient.get(
-                urlString = "https://digi-api.com/api/v1/digimon"
-            ) {
-                name?.let { parameter("name", it) }
-                if (exact) parameter("exact", "true")
-                attribute?.let { parameter("attribute", it) }
-                parameter("page", page)
-                parameter("pageSize", pageSize)
+            val response = httpClient.get("https://digi-api.com/api/v1/digimon") {
+                parameter("page", 0)
+                parameter("pageSize", 1421)
             }
-            response.body<List<DigimonResponse>>()
-        } catch (e: UnresolvedAddressException) {
-            throw Exception("Sem conexão com a internet")
-        } catch (e: SerializationException) {
-            throw Exception("Erro ao processar os dados")
+            response.body<DigimonApiResponse>().digimons
         } catch (e: Exception) {
-            throw Exception("Erro desconhecido: ${e.message}")
+            throw Exception("Falha na requisição: ${e.message}")
         }
     }
 }
